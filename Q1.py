@@ -7,11 +7,11 @@ import collections
 def min_heapify(A,k):
     l = left(k)
     r = right(k)
-    if l < len(A) and A[l].data[1] < A[k].data[1]:
+    if l < len(A) and A[l].freq < A[k].freq:
         smallest = l
     else:
         smallest = k
-    if r < len(A) and A[r].data[1] < A[smallest].data[1]:
+    if r < len(A) and A[r].freq < A[smallest].freq:
         smallest = r
     if smallest != k:
         A[k], A[smallest] = A[smallest], A[k]
@@ -30,12 +30,13 @@ def build_min_heap(A):
 #Tree
 
 class Node:
-   def __init__(self, data):
+   def __init__(self, dat, freq):
       self.left = None
       self.right = None
-      self.data = data
+      self.dat = dat
+      self.freq = freq
    def PrintTree(self):
-      print(self.data)
+      print(self.dat, "->", freq)
 
 
 # Reversing a list using reverse()
@@ -50,26 +51,26 @@ with open('File3.txt', 'r') as info:
 ncount = count.most_common()
 nheap = []
 dist = ncount.__len__()
-i = 1
+i = 0
 for i in range (dist):
-  nheap.append(Node(ncount[i]))
-print(nheap[0].data[1])
+  nheap.append(Node(ncount[i][0], ncount[i][1]))
 # Huffman
 
 build_min_heap(nheap)
-print("hi")
-while (ncount.__len__() != 1):
-  l = Node(ncount[0])
+#print("hi")
+while (ncount.__len__() != 0):
+  #print("Hey")
+  l = Node(ncount[0][0], ncount[0][1])
   #temp = ncount[0]
   ncount.remove(ncount[0])
-  build_min_heap(ncount)
-  r = Node(ncount[0])
+  build_min_heap(nheap)
+  r = Node(ncount[0][0], ncount[0][1])
   #temp = ncount[0]
   ncount.remove(ncount[0])
-  build_min_heap(ncount)
-  join = Node(['#', l.data[1] + r.data[1]])
-  join.left = l;
-  join.right = r;
-  ncount.append(join)
-  build_min_heap(ncount)
-#print(ncount)
+  build_min_heap(nheap)
+  join = Node('#', l.freq + r.freq)
+  join.left = l
+  join.right = r
+  nheap.append(join)
+  build_min_heap(nheap)
+print(nheap)
