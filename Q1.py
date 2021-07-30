@@ -1,52 +1,49 @@
 from heapq import *
 import collections
-flag = 0
+flag = 0                                # Flag variable for decoding
 
-#Defining a class for the heap
-class MyHeap():
+class MyHeap():                         # Defining a class for the heap
     def __init__(self):
-       self.key = lambda x:x.freq       #Criteria to use for the min heap
-       self.index = 0                   #Number of elements in the heap
-       self._data = []                  #Initialising it as an empty heap
+        self.key = lambda x: x.freq     # Criteria to use for the min heap
+        self.index = 0                  # Number of elements in the heap
+        self._data = []                 # Initialising it as an empty heap
 
     def push(self, item):
-       heappush(self._data, (self.key(item), self.index, item))
-       self.index += 1
+        heappush(self._data, (self.key(item), self.index, item))
+        self.index += 1
 
     def pop(self):
         self.index -= 1
         return heappop(self._data)[2]
 
-#Defining a class for nodes of the tree
-class Node:
+class Node:                             # Defining a class for nodes of the tree
     def __init__(self, dat, freq):
-      self.left = None
-      self.right = None
-      self.dat = dat
-      self.freq = freq
-      self.cw = ""
+        self.left = None
+        self.right = None
+        self.dat = dat
+        self.freq = freq
+        self.cw = ""
+
     def __repr__(self):
         return str(self.dat) + " -> " + str(self.freq)
 
 
-def codegen(head, s):
-    if head == None:                    #We reach a leaf and are trying to go further
+def codegen(head, s):                   # We reach a leaf and are trying to go further
+    if head == None:  
         return
-    
-    if head.dat != "#":                 #A node that is a leaf, as it has an actual symbol, not '#'
+
+    if head.dat != "#":                 # A node that is a leaf, as it has an actual symbol, not '#'
         head.cw = s
         print(head.dat, "->", head.freq, "\t\t\t", head.cw)
-    codegen(head.left, s+"0")           #Recursively calling the method onto the two branches of the current leaf
+                            
+    codegen(head.left, s+"0")           # Recursively calling the method onto the two branches of the current leaf
     codegen(head.right, s+"1")
 
-
-# Reversing a list using reverse()
-def Reverse(lst):
+def Reverse(lst):                       # Reversing a list using reverse()
     lst.reverse()
     return lst
 
-# Encoder function that writes to a file
-def encoder(head, s, fout):
+def encoder(head, s, fout):             # Encoder function that writes to a file
     if head == None:
         return
 
@@ -56,7 +53,8 @@ def encoder(head, s, fout):
     encoder(head.left, s, fout)
     encoder(head.right, s, fout)
 
-#Decoder function that is supposed to take an encoded codeword and write the decoded character to a given file
+# Decoder function that is supposed to take an encoded codeword and write the decoded character to a given file
+
 def decoder(head, ch, fout):
     global flag
 
@@ -74,14 +72,14 @@ def decoder(head, ch, fout):
 # MAIN STARTS HERE NOOB
 
 with open('File1.txt', 'r') as info:
-  count = collections.Counter(info.read())
-  total = sum(count.values())
+    count = collections.Counter(info.read())
+    total = sum(count.values())
 
 ncount = count.most_common()
 nheap = MyHeap()
 dist = ncount.__len__()
 i = 0
-for i in range (dist):
+for i in range(dist):
     temp = Node(ncount[i][0], ncount[i][1])
     nheap.push(temp)
 
@@ -100,9 +98,8 @@ info = open("File1.txt", 'r')
 dcd = open("Decoded1.txt", 'w')
 ptext = info.read()
 insize = ptext.__len__()
-#print(insize)
 i = 0
-for i in range (insize):
+for i in range(insize):
     encoder(nheap._data[0][2], ptext[i], cd)
 
 cd.close()
@@ -122,7 +119,7 @@ rcd.close()
 dcd.close()
 info.close()
 
-# The encoded files have characters and not bits in them. 
+# The encoded files have characters and not bits in them.
 # So for a comparison of file sizes their actual sizes in bytes need be divided by 16.
 # This is because each character takes 2 bytes, which is 16 bits instead of the 1 bit they are supposed to take.
 # According to this, we get
