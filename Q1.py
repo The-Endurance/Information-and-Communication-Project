@@ -1,35 +1,6 @@
-#f = open('File1.txt', 'r')
-#tx = f.read()
-#print(tx)
-#f.close()
 from heapq import *
 import collections
-"""
-def min_heapify(A,k,key):
-    l = left(k)
-    r = right(k)
-    if l < len(A) and key(A[l]) < key(A[k]):
-        smallest = l
-    else:
-        smallest = k
-    if r < len(A) and key(A[r]) < key(A[smallest]):
-        smallest = r
-    if smallest != k:
-        A[k], A[smallest] = A[smallest], A[k]
-        min_heapify(A, smallest, key)
-
-def left(k):
-    return 2 * k + 1
-
-def right(k):
-    return 2 * k + 2
-
-def build_min_heap(A, key):
-    n = int((len(A)//2)-1)
-    for k in range(n, -1, -1):
-        min_heapify(A,k, key)
-#Tree
-"""
+flag = 0
 
 #Defining a class for the heap
 class MyHeap():
@@ -59,7 +30,6 @@ class Node:
 
 
 def codegen(head, s):
-    #print(head)
     if head == None:                    #We reach a leaf and are trying to go further
         return
     
@@ -75,6 +45,7 @@ def Reverse(lst):
     lst.reverse()
     return lst
 
+# Encoder function that writes to a file
 def encoder(head, s, fout):
     if head == None:
         return
@@ -85,8 +56,24 @@ def encoder(head, s, fout):
     encoder(head.left, s, fout)
     encoder(head.right, s, fout)
 
+#Decoder function that is supposed to take an encoded codeword and write the decoded character to a given file
+def decoder(head, ch, fout):
+    global flag
 
-with open('File3.txt', 'r') as info:
+    if head == None:
+        return
+
+    if head.dat != "#" and head.cw == ch:
+        fout.write(head.dat)
+        flag = 1
+        return
+
+    decoder(head.left, ch, fout)
+    decoder(head.right, ch, fout)
+
+# MAIN STARTS HERE NOOB
+
+with open('File1.txt', 'r') as info:
   count = collections.Counter(info.read().lower())
   total = sum(count.values())
 
@@ -108,14 +95,32 @@ while nheap.index != 1:
 
 codegen(nheap._data[0][2], "")
 
-cd = open("Encoded3.txt", 'w')
-info = open("File3.txt", 'r')
+cd = open("Encoded1.txt", 'w')
+rcd = open("Encoded1.txt", 'r')
+info = open("File1.txt", 'r')
+dcd = open("Decoded1.txt", 'w')
 ptext = info.read().lower()
 insize = ptext.__len__()
+#print(insize)
 i = 0
 for i in range (insize):
     encoder(nheap._data[0][2], ptext[i], cd)
 
+cur = ""
+while 1:
+    encoded = rcd.read(1)
+    print(encoded)
+    if not encoded:
+        break
+    cur += encoded
+    decoder(nheap._data[0][2], cur, dcd)
+    if flag == 1:
+        flag = 0
+        #print(cur)
+        cur = ""
+
+rcd.close()
+dcd.close()
 cd.close()
 info.close()
 
