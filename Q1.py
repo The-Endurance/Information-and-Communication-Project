@@ -31,11 +31,12 @@ def build_min_heap(A, key):
 #Tree
 """
 
+#Defining a class for the heap
 class MyHeap():
     def __init__(self):
-       self.key = lambda x:x.freq
-       self.index = 0 
-       self._data = []
+       self.key = lambda x:x.freq       #Criteria to use for the min heap
+       self.index = 0                   #Number of elements in the heap
+       self._data = []                  #Initialising it as an empty heap
 
     def push(self, item):
        heappush(self._data, (self.key(item), self.index, item))
@@ -45,6 +46,7 @@ class MyHeap():
         self.index -= 1
         return heappop(self._data)[2]
 
+#Defining a class for nodes of the tree
 class Node:
     def __init__(self, dat, freq):
       self.left = None
@@ -58,13 +60,13 @@ class Node:
 
 def codegen(head, s):
     #print(head)
-    if head == None:
+    if head == None:                    #We reach a leaf and are trying to go further
         return
     
-    if head.dat != "#":
+    if head.dat != "#":                 #A node that is a leaf, as it has an actual symbol, not '#'
         head.cw = s
         print(head.dat, "->", head.freq, "\t\t\t", head.cw)
-    codegen(head.left, s+"0")
+    codegen(head.left, s+"0")           #Recursively calling the method onto the two branches of the current leaf
     codegen(head.right, s+"1")
 
 
@@ -72,6 +74,17 @@ def codegen(head, s):
 def Reverse(lst):
     lst.reverse()
     return lst
+
+def encoder(head, s, fout):
+    if head == None:
+        return
+
+    if head.dat != "#" and head.dat == s:
+        fout.write(head.cw)
+
+    encoder(head.left, s, fout)
+    encoder(head.right, s, fout)
+
 
 with open('File3.txt', 'r') as info:
   count = collections.Counter(info.read().lower())
@@ -85,8 +98,6 @@ for i in range (dist):
     temp = Node(ncount[i][0], ncount[i][1])
     nheap.push(temp)
 
-
-
 while nheap.index != 1:
     l = nheap.pop()
     r = nheap.pop()
@@ -96,17 +107,23 @@ while nheap.index != 1:
     nheap.push(temp)
 
 codegen(nheap._data[0][2], "")
-#[print(n) for n in nheap._data]
 
-# Huffman
+cd = open("Encoded3.txt", 'w')
+info = open("File3.txt", 'r')
+ptext = info.read().lower()
+insize = ptext.__len__()
+i = 0
+for i in range (insize):
+    encoder(nheap._data[0][2], ptext[i], cd)
 
-#print("spez")
+cd.close()
+info.close()
 
-#build_min_heap(nheap, lambda n : n.freq)
+# The encoded files have characters and not bits in them. 
+# So for a comparison of file sizes their actual sizes in bytes need be divided by 16.
+# This is because each character takes 2 bytes, which is 16 bits instead of the 1 bit they are supposed to take.
+# According to this, we get
 
-#print("hi")
-
-#while (ncount.__len__() != 0):
-  #print("Hey")
-
-
+# Encoded1.txt = 18122/16 = 1132.625 bytes, Initial size of File1.txt = 7245 bytes 
+# Encoded2.txt = 27648/16 = 1728 bytes, Initial size of File2.txt = 7149 bytes
+# Encoded3.txt = 42057/16 = 2628.5625 bytes, Initial size of File3.txt = 9851 bytes
