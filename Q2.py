@@ -1,63 +1,90 @@
 import random
 
-def rand_codeword(p):
+
+def rand_codeword(n):  # function to generate a random n length codeword
 
     word = ""
-    for i in range(p):
-        temp = str(random.randint(0,1))
-        word+=temp
-    return word
+    for i in range(n):
+        # give 0 or 1 as the ith bit in the codeword
+        temp = str(random.randint(0, 1))
+        word += temp
+    return word                             # n length codeword
 
-def make_y(x,p):
+
+def BSC(x, p):                               # simulate the output of BSC channel
     y = ""
     for i in range(len(x)):
+        # generate a float b/w 0 and 1; if it is <= P(bitflip) then bitflip occurs
         check = random.random()
         if check <= p:
-            if x[i] == "1":
+            if x[i] == "1":                 # bitflip
                 y += "0"
             else:
                 y += "1"
         else:
-            y += x[i]
+            y += x[i]                       # no bitflip
     return y
 
 
-n = 15
-k = 10
-p = 0.015
+# Driver code starts here
 
-N = 2000
+f = open("Q2Results.txt", 'w')
 
-codeword_list = set()
+for i in range(6):
+    # parameters
+    N = 2000
+    E = 0
 
-while len(codeword_list) < pow(2,k):
-    word = rand_codeword(n)
-    codeword_list.add(word)
+    n = int(input("n = "))
+    f.write("n = ")
+    f.write(str(n))
+    f.write("\n")
+    k = int(input("k = "))
+    f.write("k = ")
+    f.write(str(k))
+    f.write("\n")
+    p = float(input("p = "))
+    f.write("p = ")
+    f.write(str(p))
+    f.write("\n")
 
-Len = len(codeword_list)
-E = 0
+    codeword_list = set()                       # set to store 2^k random codewords
+    # set ensures that there is no duplication
+    while len(codeword_list) < pow(2, k):
+        word = rand_codeword(n)
+    # generate 2^k random n length codewords and store them in the set
+        codeword_list.add(word)
 
-for i in range(N):
-    ip = random.choice(tuple(codeword_list))
-    y = make_y(ip,p)
+    Len = len(codeword_list)                    # cardinality of code C = 2^k
 
-    j = 0
-    min = n
-    word = ""
-    for j in codeword_list:
-        dist = 0
-        for k in range(n):
-            if y[k] != j[k]:
-                dist+=1
-        if dist<min:
-            min = dist
-            word = j
+    for i in range(N):
+        # pick a random codeword from the set as input to BSC
+        ip = random.choice(tuple(codeword_list))
+        y = BSC(ip, p)                               # y is output of BSC
 
-    if word != ip:
-        E+=1
+        j = 0
+        min = n                                     # variable to track minimun Hamming distance
+        word = ""                                   # codeword with minimum Hamming distance
+        for j in codeword_list:
+            dist = 0                                # initialising distance to be 0
+            for k in range(n):
+                if y[k] != j[k]:
+                    dist += 1                         # incrementing distance when flipped bit is found
+            if dist < min:                            # updating min Hamming distance and estimate
+                min = dist
+                # word is the estimate; if it is not equal to the input, then E is incremented
+                word = j
+        if word != ip:
+            E += 1
 
-print(E)
+    # No. of decoding errors
+    f.write("E = ")
+    f.write(str(E))
+    f.write("\n")
 
-pOfE = E/N
+    # P(error) for a random code C and BSC with parameters (n, k, p)
+    pOfE = E/N
 
-print("P(Error) = ", pOfE)
+    f.write("P(Error) = ")
+    f.write(str(pOfE))
+    f.write("\n\n")

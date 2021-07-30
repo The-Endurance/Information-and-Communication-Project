@@ -74,7 +74,7 @@ def decoder(head, ch, fout):
 # MAIN STARTS HERE NOOB
 
 with open('File1.txt', 'r') as info:
-  count = collections.Counter(info.read().lower())
+  count = collections.Counter(info.read())
   total = sum(count.values())
 
 ncount = count.most_common()
@@ -96,32 +96,30 @@ while nheap.index != 1:
 codegen(nheap._data[0][2], "")
 
 cd = open("Encoded1.txt", 'w')
-rcd = open("Encoded1.txt", 'r')
 info = open("File1.txt", 'r')
 dcd = open("Decoded1.txt", 'w')
-ptext = info.read().lower()
+ptext = info.read()
 insize = ptext.__len__()
 #print(insize)
 i = 0
 for i in range (insize):
     encoder(nheap._data[0][2], ptext[i], cd)
 
+cd.close()
 cur = ""
+rcd = open("Encoded1.txt", 'r')
 while 1:
     encoded = rcd.read(1)
-    print(encoded)
     if not encoded:
         break
     cur += encoded
     decoder(nheap._data[0][2], cur, dcd)
     if flag == 1:
         flag = 0
-        #print(cur)
         cur = ""
 
 rcd.close()
 dcd.close()
-cd.close()
 info.close()
 
 # The encoded files have characters and not bits in them. 
@@ -129,6 +127,6 @@ info.close()
 # This is because each character takes 2 bytes, which is 16 bits instead of the 1 bit they are supposed to take.
 # According to this, we get
 
-# Encoded1.txt = 18122/16 = 1132.625 bytes, Initial size of File1.txt = 7245 bytes 
-# Encoded2.txt = 27648/16 = 1728 bytes, Initial size of File2.txt = 7149 bytes
-# Encoded3.txt = 42057/16 = 2628.5625 bytes, Initial size of File3.txt = 9851 bytes
+# Encoded1.txt = 19920/16 = 1245 bytes, Initial size of File1.txt = 7245 bytes;  compressed 5.82 times
+# Encoded2.txt = 27648/16 = 1728 bytes, Initial size of File2.txt = 7149 bytes;  compressed 4.137 times
+# Encoded3.txt = 43319/16 = 2707.4375 bytes, Initial size of File3.txt = 9851 bytes; compressed 3.638 times
