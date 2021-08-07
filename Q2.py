@@ -55,6 +55,7 @@ for i in range(6):
         codeword_list.add(word)
 
     Len = len(codeword_list)                    # cardinality of code C = 2^k
+    pOfEmin = 1
     for c in  range (5):
         E = 0
         for i in range(N):
@@ -84,8 +85,13 @@ for i in range(6):
 
         # P(error) for a random code C and BSC with parameters (n, k, p)
         pOfE = E/N
+        if pOfE < pOfEmin:
+            pOfEmin = pOfE
 
         f.write("P(Error) = ")
         f.write(str(pOfE))
         f.write("\n")
+
+    f.write("Minimum P(Error) = ")
+    f.write(str(pOfEmin))
     f.write("\n\n")
