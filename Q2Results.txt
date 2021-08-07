@@ -1,36 +1,90 @@
 n = 15
 k = 10
 p = 0.015
+E = 109
+P(Error) = 0.0545
+E = 109
+P(Error) = 0.0545
+E = 105
+P(Error) = 0.0525
+E = 97
+P(Error) = 0.0485
 E = 103
 P(Error) = 0.0515
+
 
 n = 15
 k = 10
 p = 0.1
-E = 916
-P(Error) = 0.458
+E = 940
+P(Error) = 0.47
+E = 972
+P(Error) = 0.486
+E = 953
+P(Error) = 0.4765
+E = 975
+P(Error) = 0.4875
+E = 958
+P(Error) = 0.479
+
 
 n = 15
 k = 10
 p = 0.45
-E = 1989
-P(Error) = 0.9945
+E = 1998
+P(Error) = 0.999
+E = 1994
+P(Error) = 0.997
+E = 1995
+P(Error) = 0.9975
+E = 1992
+P(Error) = 0.996
+E = 1994
+P(Error) = 0.997
+
 
 n = 20
 k = 10
 p = 0.015
+E = 19
+P(Error) = 0.0095
+E = 11
+P(Error) = 0.0055
+E = 12
+P(Error) = 0.006
+E = 15
+P(Error) = 0.0075
 E = 16
 P(Error) = 0.008
+
 
 n = 20
 k = 10
 p = 0.1
-E = 507
-P(Error) = 0.2535
+E = 481
+P(Error) = 0.2405
+E = 522
+P(Error) = 0.261
+E = 521
+P(Error) = 0.2605
+E = 493
+P(Error) = 0.2465
+E = 491
+P(Error) = 0.2455
+
 
 n = 20
 k = 10
 p = 0.45
-E = 1992
-P(Error) = 0.996
+E = 1994
+P(Error) = 0.997
+E = 1995
+P(Error) = 0.9975
+E = 1993
+P(Error) = 0.9965
+E = 1990
+P(Error) = 0.995
+E = 1996
+P(Error) = 0.998
+
 

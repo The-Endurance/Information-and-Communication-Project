@@ -33,7 +33,6 @@ f = open("Q2Results.txt", 'w')
 for i in range(6):
     # parameters
     N = 2000
-    E = 0
 
     n = int(input("n = "))
     f.write("n = ")
@@ -56,35 +55,37 @@ for i in range(6):
         codeword_list.add(word)
 
     Len = len(codeword_list)                    # cardinality of code C = 2^k
+    for c in  range (5):
+        E = 0
+        for i in range(N):
+            # pick a random codeword from the set as input to BSC
+            ip = random.choice(tuple(codeword_list))
+            y = BSC(ip, p)                               # y is output of BSC
 
-    for i in range(N):
-        # pick a random codeword from the set as input to BSC
-        ip = random.choice(tuple(codeword_list))
-        y = BSC(ip, p)                               # y is output of BSC
+            j = 0
+            min = n                                     # variable to track minimun Hamming distance
+            word = ""                                   # codeword with minimum Hamming distance
+            for j in codeword_list:
+                dist = 0                                # initialising distance to be 0
+                for k in range(n):
+                    if y[k] != j[k]:
+                        dist += 1                         # incrementing distance when flipped bit is found
+                if dist < min:                            # updating min Hamming distance and estimate
+                    min = dist
+                    # word is the estimate; if it is not equal to the input, then E is incremented
+                    word = j
+            if word != ip:
+                E += 1
 
-        j = 0
-        min = n                                     # variable to track minimun Hamming distance
-        word = ""                                   # codeword with minimum Hamming distance
-        for j in codeword_list:
-            dist = 0                                # initialising distance to be 0
-            for k in range(n):
-                if y[k] != j[k]:
-                    dist += 1                         # incrementing distance when flipped bit is found
-            if dist < min:                            # updating min Hamming distance and estimate
-                min = dist
-                # word is the estimate; if it is not equal to the input, then E is incremented
-                word = j
-        if word != ip:
-            E += 1
+        # No. of decoding errors
+        f.write("E = ")
+        f.write(str(E))
+        f.write("\n")
 
-    # No. of decoding errors
-    f.write("E = ")
-    f.write(str(E))
-    f.write("\n")
+        # P(error) for a random code C and BSC with parameters (n, k, p)
+        pOfE = E/N
 
-    # P(error) for a random code C and BSC with parameters (n, k, p)
-    pOfE = E/N
-
-    f.write("P(Error) = ")
-    f.write(str(pOfE))
+        f.write("P(Error) = ")
+        f.write(str(pOfE))
+        f.write("\n")
     f.write("\n\n")
